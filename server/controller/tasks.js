@@ -59,8 +59,28 @@ const createTask = async (req, res) => {
   }
 };
 
-const deleteTask = (req, res) => {
-  res.status(200).send("This is the deleted task");
+const deleteTask = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    const task = await Tasks.findOneAndDelete({ _id: taskId });
+    if (!task) {
+      res.status(400).json({
+        status: "failed",
+        message: "task not found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Task deleted succesfully",
+      data: task,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Unable to delete task",
+      error: error,
+    });
+  }
 };
 
 const updateTask = (req, res) => {

@@ -11,6 +11,6 @@ const {
 const router = express.Router(); // creating a router.
 
 router.route("/").get(getAllTasks).post(createTask);
-router.route("/:id").get(getOneTask).put(updateTask).delete(deleteTask);
+router.route("/:id").get(getOneTask).patch(updateTask).delete(deleteTask);
 
 module.exports = router;
