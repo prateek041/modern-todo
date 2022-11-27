@@ -1,14 +1,31 @@
-const express = require('express')
-const router = require('./routes/task-routes')
+const express = require("express");
+const router = require("./routes/task-routes");
+const connectDB = require("./database/db"); // function managing database connection
 
-const app = express()
+require("dotenv").config(); // for accesing environment variables
 
-app.get("/", (req, res)=>{
-	res.status(200).send("This is the home page")
-})
+const app = express();
 
-app.use("/api/v1/tasks", router)
+// middlewares.
+app.use(express.json());
 
-app.listen(9090, ()=>{
-	console.log("Listening to port 9090")
-})
+app.get("/", (req, res) => {
+  res.status(200).send("This is the home page");
+});
+
+// routes
+app.use("/api/v1/todos", router);
+
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI);
+
+    app.listen(9090, () => {
+      console.log("Listening to port 9090");
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
